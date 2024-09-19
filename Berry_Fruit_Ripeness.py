@@ -8,7 +8,8 @@
  * Program history
  * ============================================================
  * Author    		Date		    Version		History
- * HG Kim           2024.09.12      v1          모델 생성 및 테스트
+   HG Kim           2024.09.12      v1          모델 생성 및 테스트
+   HG Kim           2024.09.13      v2          train 데이터셋 업데이트
 """
 
 import os
