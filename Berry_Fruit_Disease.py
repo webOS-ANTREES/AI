@@ -1,5 +1,5 @@
 """
- * Project : 제 22회 임베디드 SW 경진대회 딸기 판독 CNN 모델 생성
+ * Project : 제 22회 임베디드 SW 경진대회 딸기 병충해 판단 CNN 모델 생성
  * Program Purpose and Features :
  * - load Strawberries Image and Analysis
  * Author : HG Kim
@@ -7,7 +7,12 @@
  * ============================================================
  * Program history
  * ============================================================
- * Author    		Date		    Version		History
+ * Author    		Date		    Version		     History
+   HG Kim           2024.08.01      CNN_Model.v1     모델 생성 및 테스트
+   HG Kim           2024.08.01      CNN_Model.v2     train 데이터셋 업데이트
+   HG Kim           2024.08.01      CNN_Model.v3     CNN 필터 크기 변경 및 에폭 변경
+   HG Kim           2024.08.01      CNN_Model.v4     train 데이터셋 업데이트
+   HG Kim           2024.08.01      CNN_Model.v5     train 데이터셋 업데이트
 """
 
 import os
