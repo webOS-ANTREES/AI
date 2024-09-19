@@ -9,8 +9,7 @@
  * ============================================================
  * Author    		Date		    Version		        History
     HG Kim          2024.09.03      Model_with_Yolo.v1  모델 생성해봄.
-    HG Kim          
-    HG Kim          
+    HG Kim          2024.09.18      Model_with_Yolo.v2  roboflow를 통한 모델 성능 향상
 """
 
 import torch
