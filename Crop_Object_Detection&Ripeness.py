@@ -51,22 +51,26 @@ def save_detection_labels(detections, img_path, labels_save_path):
     
     print(f"Labels saved to {label_file_path}")
 
+import shutil
+
 def process_images(model, folder_path, save_path, classes_to_filter=(0, 1)):
     """
     Run object detection on all images in a folder, save results with bounding boxes, 
-    and store detection information in text files.
+    and store detection information in text files. Also, save raw original images.
     :param model: YOLOv5 model.
     :param folder_path: Path to the folder containing images.
     :param save_path: Path to the folder where results will be saved.
     :param classes_to_filter: Tuple of class IDs to filter (default is (0, 1) for ripe and unripe strawberries).
     """
-    # Define the paths for saving images and labels
+    # Define the paths for saving images, labels, and raw data
     images_save_path = os.path.join(save_path, 'images')
     labels_save_path = os.path.join(save_path, 'labels')
+    raw_data_save_path = os.path.join(save_path, 'raw_data')
 
     # Create save directories if they don't exist
     Path(images_save_path).mkdir(parents=True, exist_ok=True)
     Path(labels_save_path).mkdir(parents=True, exist_ok=True)
+    Path(raw_data_save_path).mkdir(parents=True, exist_ok=True)
 
     # Get all image files from folder
     images = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(('.png', '.jpg'))]
@@ -107,10 +111,16 @@ def process_images(model, folder_path, save_path, classes_to_filter=(0, 1)):
         # Save detection labels to a text file in the 'labels' folder
         save_detection_labels(filtered_detections, img_path, labels_save_path)
 
+        # Save the original image in the 'raw_data' folder
+        raw_image_save_path = os.path.join(raw_data_save_path, os.path.basename(img_path))
+        shutil.copy(img_path, raw_image_save_path)  # Copy the original image
+        print(f"Original image saved to {raw_image_save_path}")
+
         # Print processing status
         print(f"Processed {img_path}, saved to {save_file_path}")
 
-    print("All images and labels have been processed and saved.")
+    print("All images, labels, and raw data have been processed and saved.")
+
     
 def capture_bounding_boxes(a_folder):
     images_folder = os.path.join(a_folder, 'images')
