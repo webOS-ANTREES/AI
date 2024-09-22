@@ -12,7 +12,7 @@
     HG Kim          2024.09.18      Model_with_Yolo.v2  roboflow를 통한 모델 성능 향상
     HG Kim          2024.09.19      Model_with_Yolo.v3  dataset 업데이트
     HG Kim          2024.09.19      Model_with_Yolo.v4  yolov5를 통해서 딸기 객체 탐색과 열매 익음정도를 같이 학습시킨 후 해당 모델을 통해 한번에 판단.(익음,안익음 판단 GOOD, But 잎과 줄기를 딸기로 인식하는 확률 올라감)
-    
+    HG Kim          2024.09.20      Model_with_Yolo.v5  객체 탐색한 딸기의 캡처본 저장하는 함수 추가
 """
 import torch
 import os
@@ -22,26 +22,26 @@ import shutil
 
 def load_model(model_path, model_source='local'):
     """
-    Load a YOLOv5 model.
-    :param model_path: Path to the trained model.
-    :param model_source: Source of the model (default is 'local').
-    :return: Loaded YOLOv5 model.
+    YOLOv5 모델을 불러옵니다.
+    :param model_path: 학습된 모델의 경로.
+    :param model_source: 모델의 출처 (기본값은 'local').
+    :return: 불러온 YOLOv5 모델.
     """
     return torch.hub.load('C:/Users/antl/yolov5', 'custom', path=model_path, source=model_source)
 
 def save_detection_labels(detections, img_path, labels_save_path):
     """
-    Save detection labels (bounding box coordinates, class, and confidence) to a text file.
-    :param detections: Detected objects from the model.
-    :param img_path: Path of the processed image.
-    :param labels_save_path: Path where the detection label file will be saved.
+    탐지된 객체에 대한 라벨(바운딩 박스 좌표, 클래스, 신뢰도)을 텍스트 파일로 저장합니다.
+    :param detections: 모델로부터 탐지된 객체들.
+    :param img_path: 처리된 이미지의 경로.
+    :param labels_save_path: 탐지된 라벨 파일을 저장할 경로.
     """
     label_file_path = os.path.join(labels_save_path, os.path.basename(img_path).replace('.jpg', '.txt').replace('.png', '.txt'))
     
     with open(label_file_path, 'w') as label_file:
         for detection in detections:
-            x1, y1, x2, y2, conf, cls = detection  # Bounding box coordinates, confidence, class
-            # Write in YOLO format: class x_center y_center width height confidence
+            x1, y1, x2, y2, conf, cls = detection  # 바운딩 박스 좌표, 신뢰도, 클래스
+            # YOLO 형식으로 저장: 클래스 중심 좌표 x_center, y_center 너비 width, 높이 height, 신뢰도 confidence
             bbox_width = x2 - x1
             bbox_height = y2 - y1
             x_center = x1 + bbox_width / 2
@@ -49,84 +49,88 @@ def save_detection_labels(detections, img_path, labels_save_path):
             
             label_file.write(f"{int(cls)} {x_center:.4f} {y_center:.4f} {bbox_width:.4f} {bbox_height:.4f} {conf:.2f}\n")
     
-    print(f"Labels saved to {label_file_path}")
-
-import shutil
+    print(f"라벨이 {label_file_path}에 저장되었습니다.")
 
 def process_images(model, folder_path, save_path, classes_to_filter=(0, 1)):
     """
-    Run object detection on all images in a folder, save results with bounding boxes, 
-    and store detection information in text files. Also, save raw original images.
-    :param model: YOLOv5 model.
-    :param folder_path: Path to the folder containing images.
-    :param save_path: Path to the folder where results will be saved.
-    :param classes_to_filter: Tuple of class IDs to filter (default is (0, 1) for ripe and unripe strawberries).
+    폴더에 있는 모든 이미지에서 객체 탐지를 실행하고, 결과를 바운딩 박스와 함께 저장하며, 탐지 정보를 텍스트 파일에 저장합니다.
+    또한 원본 이미지를 저장합니다.
+    :param model: YOLOv5 모델.
+    :param folder_path: 이미지가 저장된 폴더의 경로.
+    :param save_path: 결과가 저장될 폴더의 경로.
+    :param classes_to_filter: 필터링할 클래스 ID들의 튜플 (기본값은 (0, 1)로, 익은 딸기와 안 익은 딸기를 의미).
     """
-    # Define the paths for saving images, labels, and raw data
+    # 이미지를 저장할 경로, 라벨을 저장할 경로, 원본 데이터를 저장할 경로 정의
     images_save_path = os.path.join(save_path, 'images')
     labels_save_path = os.path.join(save_path, 'labels')
     raw_data_save_path = os.path.join(save_path, 'raw_data')
 
-    # Create save directories if they don't exist
+    # 저장 디렉토리가 존재하지 않으면 생성
     Path(images_save_path).mkdir(parents=True, exist_ok=True)
     Path(labels_save_path).mkdir(parents=True, exist_ok=True)
     Path(raw_data_save_path).mkdir(parents=True, exist_ok=True)
 
-    # Get all image files from folder
+    # 폴더에서 모든 이미지 파일 가져오기
     images = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(('.png', '.jpg'))]
 
     for img_path in images:
-        # Perform inference
+        # 추론 수행
         results = model(img_path)
         
-        # Extract detection results
+        # 탐지 결과 추출
         detections = results.xyxy[0]
         
-        # Filter detections based on class (0 - ripe, 1 - unripe)
+        # 클래스에 기반한 탐지 필터링 (0 - 익은 딸기, 1 - 안 익은 딸기)
         filtered_detections = detections[(detections[:, 5] == 0) | (detections[:, 5] == 1)]
         
-        # Load original image
+        # 원본 이미지 로드
         img = cv2.imread(img_path)
         
-        # Draw bounding boxes on filtered objects
+        # 필터링된 객체에 바운딩 박스 그리기
         for detection in filtered_detections:
-            x1, y1, x2, y2, conf, cls = detection  # Bounding box coordinates, confidence, class
+            x1, y1, x2, y2, conf, cls = detection  # 바운딩 박스 좌표, 신뢰도, 클래스
             
-            # Set color and label based on class
+            # 클래스에 따라 색상과 라벨 설정
             if int(cls) == 0:
-                color = (255, 0, 0)  # Green for ripe strawberry
-                label = f'Ripe: {conf:.2f}'
+                color = (255, 0, 0)  # 익은 딸기는 초록색
+                label = f'익은 딸기: {conf:.2f}'
             elif int(cls) == 1:
-                color = (0, 0, 255)  # Red for unripe strawberry
-                label = f'Unripe: {conf:.2f}'
+                color = (0, 0, 255)  # 안 익은 딸기는 빨간색
+                label = f'안 익은 딸기: {conf:.2f}'
             
-            # Draw bounding box and label
+            # 바운딩 박스와 라벨 그리기
             cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
             cv2.putText(img, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
 
-        # Save the result image in the 'images' folder
+        # 결과 이미지를 'images' 폴더에 저장
         save_file_path = os.path.join(images_save_path, os.path.basename(img_path))
         cv2.imwrite(save_file_path, img)
 
-        # Save detection labels to a text file in the 'labels' folder
+        # 탐지된 라벨을 텍스트 파일로 'labels' 폴더에 저장
         save_detection_labels(filtered_detections, img_path, labels_save_path)
 
-        # Save the original image in the 'raw_data' folder
+        # 원본 이미지를 'raw_data' 폴더에 저장
         raw_image_save_path = os.path.join(raw_data_save_path, os.path.basename(img_path))
-        shutil.copy(img_path, raw_image_save_path)  # Copy the original image
-        print(f"Original image saved to {raw_image_save_path}")
+        shutil.copy(img_path, raw_image_save_path)  # 원본 이미지 복사
+        print(f"원본 이미지가 {raw_image_save_path}에 저장되었습니다.")
 
-        # Print processing status
-        print(f"Processed {img_path}, saved to {save_file_path}")
+        # 처리 상태 출력
+        print(f"{img_path} 처리가 완료되어 {save_file_path}에 저장되었습니다.")
 
-    print("All images, labels, and raw data have been processed and saved.")
+    print("모든 이미지, 라벨, 원본 데이터가 처리되어 저장되었습니다.")
+
 
     
-def capture_bounding_boxes(a_folder):
-    images_folder = os.path.join(a_folder, 'images')
-    labels_folder = os.path.join(a_folder, 'labels')
-    ripe_folder = os.path.join(a_folder, 'captured_ripe_berry')
-    unripe_folder = os.path.join(a_folder, 'captured_unripe_berry')
+def capture_bounding_boxes(Object_Detection_Result_Folder):
+    """
+    라벨 파일을 읽고, 해당 바운딩 박스 좌표에 맞춰 이미지를 잘라내어 익은 딸기와 안 익은 딸기로 분류하여 저장합니다.
+    :param Object_Detection_Result_Folder: 라벨과 이미지를 포함한 폴더 경로.
+    """
+    
+    images_folder = os.path.join(Object_Detection_Result_Folder, 'raw_data')
+    labels_folder = os.path.join(Object_Detection_Result_Folder, 'labels')
+    ripe_folder = os.path.join(Object_Detection_Result_Folder, 'captured_ripe_berry')
+    unripe_folder = os.path.join(Object_Detection_Result_Folder, 'captured_unripe_berry')
 
     # 폴더가 없으면 생성
     os.makedirs(ripe_folder, exist_ok=True)
@@ -198,7 +202,7 @@ def capture_bounding_boxes(a_folder):
                         print(f"잘라낸 이미지 저장됨: {output_path}")
                     else:
                         print(f"Warning: 너무 작은 바운딩 박스 영역. 라벨 파일: {label_file}, 좌표: {(x_min, y_min, x_max, y_max)}")
-# 'a' 폴더 경로 예시
+
 # Example of how to call the functions
 if __name__ == "__main__":
     model_path = 'C:/Users/antl/yolov5/runs/train/exp11/weights/best.pt'
@@ -206,7 +210,5 @@ if __name__ == "__main__":
     save_path = 'C:/Users/antl/SW_22th_contest/Object_Detective_Data/results_v4'
 
     model = load_model(model_path)
-    process_images(model, folder_path, save_path
-    a_folder_path = 'C:/Users/antl/SW_22th_contest/Object_Detective_Data/results_v4'
-    capture_bounding_boxes(a_folder_path)
-
+    process_images(model, folder_path, save_path)
+    capture_bounding_boxes(save_path)
