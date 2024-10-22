@@ -25,7 +25,12 @@ import paho.mqtt.client as mqtt
 import time
 
 #BROKER_ADDRESS = "172.20.48.180"  # MQTT 브로커 주소
-BROKER_ADDRESS = "165.229.185.243"
+#BROKER_ADDRESS = "165.229.185.243"
+#BROKER_ADDRESS="192.168.50.248"
+# 태우 노트북 핫스팟
+BROKER_ADDRESS = "192.168.137.147"
+#대장 핫스팟
+# BROKER_ADDRESS = "192.0.0.2"
 TOPIC = "robot/location"  # 위치 값을 받을 토픽
 
 # MQTT 설정 함수
