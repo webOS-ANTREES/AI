@@ -1,4 +1,4 @@
-antl@raspberrypi:~ $ pip install opencv-python
+antl@raspberrypi:~/22th_contest $ pip install opencv-python
 error: externally-managed-environment
 
 × This environment is externally managed
@@ -15,25 +15,3 @@ error: externally-managed-environment
 
 note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
 hint: See PEP 668 for the detailed specification.
-antl@raspberrypi:~ $  cd /home/antl ; /usr/bin/env /bin/python /home/antl/.vscode/extensions/ms-python.debugpy-2024.12.0-linux-arm64/bundled/libs/debugpy/adapter/../../debugpy/launcher 47287 -- /home/antl/Documents/python_code/module.py 
-^CTraceback (most recent call last):
-  File "/usr/lib/python3.11/runpy.py", line 198, in _run_module_as_main
-    return _run_code(code, main_globals, None,
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.11/runpy.py", line 88, in _run_code
-    exec(code, run_globals)
-  File "/home/antl/.vscode/extensions/ms-python.debugpy-2024.12.0-linux-arm64/bundled/libs/debugpy/adapter/../../debugpy/launcher/../../debugpy/__main__.py", line 71, in <module>
-    cli.main()
-  File "/home/antl/.vscode/extensions/ms-python.debugpy-2024.12.0-linux-arm64/bundled/libs/debugpy/adapter/../../debugpy/launcher/../../debugpy/../debugpy/server/cli.py", line 501, in main
-    run()
-  File "/home/antl/.vscode/extensions/ms-python.debugpy-2024.12.0-linux-arm64/bundled/libs/debugpy/adapter/../../debugpy/launcher/../../debugpy/../debugpy/server/cli.py", line 351, in run_file
-    runpy.run_path(target, run_name="__main__")
-  File "/home/antl/.vscode/extensions/ms-python.debugpy-2024.12.0-linux-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 310, in run_path
-    return _run_module_code(code, init_globals, run_name, pkg_name=pkg_name, script_name=fname)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/antl/.vscode/extensions/ms-python.debugpy-2024.12.0-linux-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 127, in _run_module_code
-    _run_code(code, mod_globals, init_globals, mod_name, mod_spec, pkg_name, script_name)
-  File "/home/antl/.vscode/extensions/ms-python.debugpy-2024.12.0-linux-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 118, in _run_code
-    exec(code, run_globals)
-  File "/home/antl/Documents/python_code/module.py", line 1, in <module>
-    import cv2
