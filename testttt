@@ -2,3 +2,30 @@ yolo task=detect mode=val model=runs/detect/train/weights/best.pt data=dataset.y
 
 
 yolo task=detect mode=predict model=runs/detect/train/weights/best.pt source=path/to/test/images
+
+
+hgkim@ubuntu:~/Documents/trash_detect_v1$ yolo task=detect mode=val model=runs/detect/train/weights/best.pt data=dataset.yaml
+Traceback (most recent call last):
+  File "/home/hgkim/.local/bin/yolo", line 8, in <module>
+    sys.exit(entrypoint())
+  File "/home/hgkim/.local/lib/python3.10/site-packages/ultralytics/cfg/__init__.py", line 772, in entrypoint
+    model = YOLO(model, task=task)
+  File "/home/hgkim/.local/lib/python3.10/site-packages/ultralytics/models/yolo/model.py", line 23, in __init__
+    super().__init__(model=model, task=task, verbose=verbose)
+  File "/home/hgkim/.local/lib/python3.10/site-packages/ultralytics/engine/model.py", line 145, in __init__
+    self._load(model, task=task)
+  File "/home/hgkim/.local/lib/python3.10/site-packages/ultralytics/engine/model.py", line 285, in _load
+    self.model, self.ckpt = attempt_load_one_weight(weights)
+  File "/home/hgkim/.local/lib/python3.10/site-packages/ultralytics/nn/tasks.py", line 910, in attempt_load_one_weight
+    ckpt, weight = torch_safe_load(weight)  # load ckpt
+  File "/home/hgkim/.local/lib/python3.10/site-packages/ultralytics/nn/tasks.py", line 837, in torch_safe_load
+    ckpt = torch.load(file, map_location="cpu")
+  File "/home/hgkim/.local/lib/python3.10/site-packages/ultralytics/utils/patches.py", line 86, in torch_load
+    return _torch_load(*args, **kwargs)
+  File "/home/hgkim/.local/lib/python3.10/site-packages/torch/serialization.py", line 1065, in load
+    with _open_file_like(f, 'rb') as opened_file:
+  File "/home/hgkim/.local/lib/python3.10/site-packages/torch/serialization.py", line 468, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/home/hgkim/.local/lib/python3.10/site-packages/torch/serialization.py", line 449, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'runs/detect/train/weights/best.pt'
