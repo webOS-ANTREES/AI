@@ -1,4 +1,5 @@
-yolo task=detect mode=val model=runs/detect/train/weights/best.pt data=dataset.yaml
+yolo task=detect mode=train data=TRASH_DETECT_V1/data.yaml model=yolov8n.pt epochs=50 imgsz=640
+
 
 
 yolo task=detect mode=predict model=runs/detect/train/weights/best.pt source=path/to/test/images
