@@ -1,62 +1,79 @@
-gkim@ubuntu:~/Documents/trash_detect$ yolo task=detect mode=train data=dataset/dataset.yaml model=yolov8n.pt epochs=50 imgsz=640
-New https://pypi.org/project/ultralytics/8.3.53 available 😃 Update with 'pip install -U ultralytics'
-Ultralytics 8.3.13 🚀 Python-3.10.16 torch-2.4.1+cu121 CPU (13th Gen Intel Core(TM) i9-13900K)
-engine/trainer: task=detect, mode=train, model=yolov8n.pt, data=dataset/dataset.yaml, epochs=50, time=None, patience=100, batch=16, imgsz=640, save=True, save_period=-1, cache=False, device=None, workers=8, project=None, name=train3, exist_ok=False, pretrained=True, optimizer=auto, verbose=True, seed=0, deterministic=True, single_cls=False, rect=False, cos_lr=False, close_mosaic=10, resume=False, amp=True, fraction=1.0, profile=False, freeze=None, multi_scale=False, overlap_mask=True, mask_ratio=4, dropout=0.0, val=True, split=val, save_json=False, save_hybrid=False, conf=None, iou=0.7, max_det=300, half=False, dnn=False, plots=True, source=None, vid_stride=1, stream_buffer=False, visualize=False, augment=False, agnostic_nms=False, classes=None, retina_masks=False, embed=None, show=False, save_frames=False, save_txt=False, save_conf=False, save_crop=False, show_labels=True, show_conf=True, show_boxes=True, line_width=None, format=torchscript, keras=False, optimize=False, int8=False, dynamic=False, simplify=True, opset=None, workspace=4, nms=False, lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=7.5, cls=0.5, dfl=1.5, pose=12.0, kobj=1.0, label_smoothing=0.0, nbs=64, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, bgr=0.0, mosaic=1.0, mixup=0.0, copy_paste=0.0, copy_paste_mode=flip, auto_augment=randaugment, erasing=0.4, crop_fraction=1.0, cfg=None, tracker=botsort.yaml, save_dir=runs/detect/train3
-Downloading https://ultralytics.com/assets/Arial.Unicode.ttf to '/home/hgkim/.config/Ultralytics/Arial.Unicode.ttf'...
-100%|███████████████| 22.2M/22.2M [00:02<00:00, 10.5MB/s]
-Overriding model.yaml nc=80 with nc=2
-
-                   from  n    params  module                                       arguments                     
-  0                  -1  1       464  ultralytics.nn.modules.conv.Conv             [3, 16, 3, 2]                 
-  1                  -1  1      4672  ultralytics.nn.modules.conv.Conv             [16, 32, 3, 2]                
-  2                  -1  1      7360  ultralytics.nn.modules.block.C2f             [32, 32, 1, True]             
-  3                  -1  1     18560  ultralytics.nn.modules.conv.Conv             [32, 64, 3, 2]                
-  4                  -1  2     49664  ultralytics.nn.modules.block.C2f             [64, 64, 2, True]             
-  5                  -1  1     73984  ultralytics.nn.modules.conv.Conv             [64, 128, 3, 2]               
-  6                  -1  2    197632  ultralytics.nn.modules.block.C2f             [128, 128, 2, True]           
-  7                  -1  1    295424  ultralytics.nn.modules.conv.Conv             [128, 256, 3, 2]              
-  8                  -1  1    460288  ultralytics.nn.modules.block.C2f             [256, 256, 1, True]           
-  9                  -1  1    164608  ultralytics.nn.modules.block.SPPF            [256, 256, 5]                 
- 10                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
- 11             [-1, 6]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
- 12                  -1  1    148224  ultralytics.nn.modules.block.C2f             [384, 128, 1]                 
- 13                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
- 14             [-1, 4]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
- 15                  -1  1     37248  ultralytics.nn.modules.block.C2f             [192, 64, 1]                  
- 16                  -1  1     36992  ultralytics.nn.modules.conv.Conv             [64, 64, 3, 2]                
- 17            [-1, 12]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
- 18                  -1  1    123648  ultralytics.nn.modules.block.C2f             [192, 128, 1]                 
- 19                  -1  1    147712  ultralytics.nn.modules.conv.Conv             [128, 128, 3, 2]              
- 20             [-1, 9]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
- 21                  -1  1    493056  ultralytics.nn.modules.block.C2f             [384, 256, 1]                 
- 22        [15, 18, 21]  1    431062  ultralytics.nn.modules.head.Detect           [2, [64, 128, 256]]           
-Model summary: 249 layers, 2,690,598 parameters, 2,690,582 gradients, 6.9 GFLOPs
-
-Transferred 313/391 items from pretrained weights
-Freezing layer 'model.22.dfl.conv.weight'
-train: Scanning /home/hgkim/Documents/trash_detect/datase
-train: WARNING ⚠️ No labels found in /home/hgkim/Documents/trash_detect/dataset/labels/train.cache. See https://docs.ultralytics.com/datasets for dataset formatting guidance.
-train: New cache created: /home/hgkim/Documents/trash_detect/dataset/labels/train.cache
-WARNING ⚠️ No labels found in /home/hgkim/Documents/trash_detect/dataset/labels/train.cache, training may not work correctly. See https://docs.ultralytics.com/datasets for dataset formatting guidance.
-val: Scanning /home/hgkim/Documents/trash_detect/dataset/
-val: WARNING ⚠️ /home/hgkim/Documents/trash_detect/dataset/images/val/1017745@0_01001_221006_P1_T3__0520.jpg: ignoring corrupt image/label: image file is truncated (50 bytes not processed)
-val: WARNING ⚠️ No labels found in /home/hgkim/Documents/trash_detect/dataset/labels/val.cache. See https://docs.ultralytics.com/datasets for dataset formatting guidance.
-val: New cache created: /home/hgkim/Documents/trash_detect/dataset/labels/val.cache
-WARNING ⚠️ No labels found in /home/hgkim/Documents/trash_detect/dataset/labels/val.cache, training may not work correctly. See https://docs.ultralytics.com/datasets for dataset formatting guidance.
-Plotting labels to runs/detect/train3/labels.jpg... 
-zero-size array to reduction operation maximum which has no identity
-optimizer: 'optimizer=auto' found, ignoring 'lr0=0.01' and 'momentum=0.937' and determining best 'optimizer', 'lr0' and 'momentum' automatically... 
-optimizer: AdamW(lr=0.001667, momentum=0.9) with parameter groups 63 weight(decay=0.0), 70 weight(decay=0.0005), 69 bias(decay=0.0)
-Image sizes 640 train, 640 val
-Using 0 dataloader workers
-Logging results to runs/detect/train3
-Starting training for 50 epochs...
-
-      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
-       1/50         0G          0      120.9           1/50         0G          0      120.9           1/50         0G          0      120.7           1/50         0G          0      120.7           1/50         0G          0      120.5           1/50         0G          0      120.5           1/50         0G          0      120.4           1/50         0G          0      120.4           1/50         0G          0      120.2           1/50         0G          0      120.2           1/50         0G          0        120           1/50         0G          0        120           1/50         0G          0      119.8           1/50         0G          0      119.8           1/50         0G          0      119.5           1/50         0G          0      119.5           1/50         0G          0      119.3           1/50         0G          0      119.3           1/50         0G          0      119.1           1/50         0G          0      119.1           1/50         0G          0      118.8           1/50         0G          0      118.8           1/50         0G          0      118.6           1/50         0G          0      118.6           1/50         0G          0        100          0  
-                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|███████
-                   all        618          0          0          0          0          0
-WARNING ⚠️ no labels found in detect set, can not compute metrics without labels
-
-      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
-       2/50         0G          0       66.1          0          0        640: 
+{
+    "IMAGE_INFO": {
+        "FILE_NAME": "1016521@0_01001_221006_P1_T3__0778.jpg",
+        "DATE": "2022-10-28 13:13:46",
+        "RESOLUTION": "1920 x 1080",
+        "IMAGE_PHOTOGRAPHER": "김건무",
+        "FOCUS_DISTANCE": "11.0",
+        "EXPOSURE_TIME": "1/160",
+        "SENSITIVITY_ISO": "5000",
+        "PLACE": "강북재활용센터",
+        "REGION_NAME": null,
+        "Direction": "0",
+        "HEIGHT": "115",
+        "DAY/NIGHT": "주간",
+        "WEATHER": "맑음",
+        "IMAGE_HEIGHT": 1080,
+        "IMAGE_WIDTH": 1920,
+        "IMAGE_SIZE": "521.4 KB"
+    },
+    "ANNOTATION_INFO": [
+        {
+            "ID": "1",
+            "CLASS": "금속캔",
+            "DETAILS": "철캔",
+            "DAMAGE": "찌그러짐",
+            "DIRTINESS": "오염없음",
+            "COVER": "없음",
+            "TRANSPARENCY": "불투명",
+            "SHAPE": "중간 원통형",
+            "SHAPE_TYPE": "BOX",
+            "POINTS": [
+                [
+                    741.8624810126582,
+                    401.43781583143794,
+                    278.89701265822805,
+                    247.31544303797483
+                ]
+            ]
+        },
+        {
+            "ID": "2",
+            "CLASS": "금속캔",
+            "DETAILS": "철캔",
+            "DAMAGE": "원형",
+            "DIRTINESS": "이물질(외부)",
+            "COVER": "없음",
+            "TRANSPARENCY": "불투명",
+            "SHAPE": "높은 원통형",
+            "SHAPE_TYPE": "BOX",
+            "POINTS": [
+                [
+                    1015.6556962025317,
+                    313.17492975548845,
+                    222.8172151898733,
+                    541.2941772151901
+                ]
+            ]
+        },
+        {
+            "ID": "3",
+            "CLASS": "금속캔",
+            "DETAILS": "철캔",
+            "DAMAGE": "원형",
+            "DIRTINESS": "오염없음",
+            "COVER": "없음",
+            "TRANSPARENCY": "불투명",
+            "SHAPE": "낮은 원통형",
+            "SHAPE_TYPE": "BOX",
+            "POINTS": [
+                [
+                    508.41113924050615,
+                    872.2594867175139,
+                    197.96434632911405,
+                    194.63696202531673
+                ]
+            ]
+        }
+    ]
+}
